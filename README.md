@@ -12,3 +12,5 @@ make train
 ```bash
 tensorboard --logdir experiment_logs
 ```
+основной проект:
+https://github.com/t3hseus/spd-timeslice-unravelling

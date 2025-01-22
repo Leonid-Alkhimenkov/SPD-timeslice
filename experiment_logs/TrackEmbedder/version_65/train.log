@@ -1,0 +1,94 @@
+2025-01-22 00:54:42,595 [INFO] train: Log directory experiment_logs/TrackEmbedder/version_65
+2025-01-22 00:54:42,596 [INFO] train: GOT config: 
+======config======
+ # Parameters for clustering_algorithm:
+# ==============================================================================
+clustering_algorithm.class_ = 'AgglomerativeClustering'
+clustering_algorithm.distance_threshold = 2.5
+clustering_algorithm.module = 'sklearn.cluster'
+clustering_algorithm.n_clusters = None
+
+# Parameters for ConstraintsNormalizer:
+# ==============================================================================
+ConstraintsNormalizer.x_coord_range = (-851.0, 851.0)
+ConstraintsNormalizer.y_coord_range = (-851.0, 851.0)
+ConstraintsNormalizer.z_coord_range = (-2386.0, 2386.0)
+
+# Parameters for experiment:
+# ==============================================================================
+experiment.detector_efficiency = 1.0
+experiment.distance = %src.training.DistanceType.euclidean_distance
+experiment.hits_normalizer = @ConstraintsNormalizer()
+experiment.learning_rate = 0.001
+experiment.logging_dir = 'experiment_logs'
+experiment.metrics = \
+    [@SilhouetteScoreMetric(),
+     @DaviesBouldinScoreMetric(),
+     @CalinskiHarabaszScoreMetric(),
+     @AccuracyScoreMetric(),
+     @F1ScoreMetric(),
+     @PrecisionScoreMetric(),
+     @RecallScoreMetric()]
+experiment.model = @TrackEmbedder()
+experiment.num_epochs = 25
+experiment.num_workers = 4
+experiment.pin_memory = True
+experiment.random_seed = 42
+experiment.test_samples = 1000
+experiment.train_samples = 10000
+experiment.triplet_margin = 0.1
+experiment.type_of_triplets = %src.training.TripletType.semihard
+experiment.weight_decay = 0.01
+
+# Parameters for TrackEmbedder:
+# ==============================================================================
+TrackEmbedder.n_blocks = 2
+TrackEmbedder.output_dim = 32
+ 
+========config=======
+2025-01-22 00:54:42,596 [INFO] train: Setting random seed to 42
+2025-01-22 00:54:42,597 [INFO] train: Preparing datasets for regression
+2025-01-22 01:00:09,624 [INFO] train: Training regression model
+2025-01-22 01:15:00,573 [INFO] train: Regression model trained. Proceeding to metric learning.
+2025-01-22 01:15:00,573 [INFO] train: Preparing datasets for training and validation
+2025-01-22 01:15:00,573 [INFO] train: Creating model for training
+2025-01-22 01:15:00,574 [INFO] train: TripletTracksEmbedder(
+  (model): TrackEmbedder(
+    (input_projection): Linear(in_features=3, out_features=64, bias=True)
+    (blocks): Sequential(
+      (0): SublayerConnection(
+        (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (sublayer): FFN(
+          (linear1): Linear(in_features=64, out_features=128, bias=True)
+          (linear2): Linear(in_features=128, out_features=128, bias=True)
+          (linear3): Linear(in_features=128, out_features=128, bias=True)
+          (linear4): Linear(in_features=128, out_features=64, bias=True)
+          (relu): ReLU()
+          (dropout): Dropout(p=0.2, inplace=False)
+        )
+      )
+      (1): SublayerConnection(
+        (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (sublayer): FFN(
+          (linear1): Linear(in_features=64, out_features=128, bias=True)
+          (linear2): Linear(in_features=128, out_features=128, bias=True)
+          (linear3): Linear(in_features=128, out_features=128, bias=True)
+          (linear4): Linear(in_features=128, out_features=64, bias=True)
+          (relu): ReLU()
+          (dropout): Dropout(p=0.2, inplace=False)
+        )
+      )
+    )
+    (layer_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+    (output_layer): Linear(in_features=64, out_features=32, bias=True)
+  )
+  (_distance): LpDistance()
+  (criterion): TripletMarginLoss(
+    (distance): LpDistance()
+    (reducer): ThresholdReducer()
+  )
+  (triplet_miner): TripletMarginMiner(
+    (distance): LpDistance()
+  )
+)
+2025-01-22 08:12:49,288 [INFO] train: End of training

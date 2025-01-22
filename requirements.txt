@@ -1,0 +1,13 @@
+absl-py
+gin-config
+numpy
+torch
+pytorch-lightning
+pytorch-metric-learning
+umap-learn
+tensorboard
+matplotlib
+pandas
+plotly
+nbformat
+ipython
